@@ -1,53 +1,47 @@
-import fitz  # 这是 PyMuPDF 的官方包名
+# -*- coding: utf-8 -*-
+import fitz  # PyMuPDF
 import os
+import sys
+
+# 【关键】把项目根目录加入系统路径，确保能跨目录导入 config
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+# 从配置中心引入绝对路径，告别硬编码！
+from config.settings import SOURCE_PDF_FILE, IMAGE_SAVE_DIR
 
 class TeslaPDFParser:
-    def __init__(self, pdf_path, output_image_dir="data/extracted_images"):
+    def __init__(self, pdf_path=SOURCE_PDF_FILE, output_image_dir=IMAGE_SAVE_DIR):
         """
-        初始化解析器
-        :param pdf_path: PDF 文件的路径
-        :param output_image_dir: 提取出的图片保存的目录
+        初始化解析器，默认参数直接从 settings.py 中读取
         """
         self.pdf_path = pdf_path
         self.output_image_dir = output_image_dir
-        # 如果保存图片的文件夹不存在，自动创建一个
         os.makedirs(self.output_image_dir, exist_ok=True)
 
     def parse(self):
         print(f"🚀 开始解析 PDF: {self.pdf_path}")
-        # 打开 PDF 文档
         doc = fitz.open(self.pdf_path)
         extracted_data = []
 
-        # 逐页遍历文档
         for page_num in range(len(doc)):
             page = doc[page_num]
-
-            # 1. 提取当页纯文本
             text = page.get_text()
-
-            # 2. 提取当页所有图片
             image_list = page.get_images(full=True)
             saved_images = []
 
             for img_index, img in enumerate(image_list):
-                # 获取图片的交叉引用号 (xref)
                 xref = img[0]
-                # 提取图片的基础数据
                 base_image = doc.extract_image(xref)
                 image_bytes = base_image["image"]
                 image_ext = base_image["ext"]
                 
-                # 构造图片文件名：页码_图片序号.扩展名 (例如: page_1_img_1.png)
                 image_name = f"page_{page_num+1}_img_{img_index+1}.{image_ext}"
                 image_path = os.path.join(self.output_image_dir, image_name)
 
-                # 将图片写入本地硬盘
                 with open(image_path, "wb") as f:
                     f.write(image_bytes)
                 saved_images.append(image_path)
 
-            # 把这页的文本和图片关联起来存入字典
             extracted_data.append({
                 "page": page_num + 1,
                 "text": text.strip(),
@@ -59,18 +53,11 @@ class TeslaPDFParser:
 
 # ================= 测试代码 =================
 if __name__ == "__main__":
-    # 假设你的 PDF 已经放到了 data 目录下
-    pdf_file = "data/Tesla_Manual.pdf" 
-    
-    # 稍微做个防御性检查
-    if not os.path.exists(pdf_file):
-        print(f"⚠️ 找不到文件！请先确保你把特斯拉手册重命名为 Tesla_Manual.pdf 并放在了 data/ 目录下哦！")
+    if not os.path.exists(SOURCE_PDF_FILE):
+        print(f"⚠️ 找不到文件！请检查 {SOURCE_PDF_FILE} 是否存在！")
     else:
-        # 实例化解析器并运行
-        parser = TeslaPDFParser(pdf_file)
+        parser = TeslaPDFParser()
         result = parser.parse()
-        
-        # 打印第一页的结果预览一下
         print("\n--- 第一页解析结果预览 ---")
-        print(f"该页提取到的图片路径: {result[0]['images']}")
-        print(f"该页文本内容前 150 字: \n{result[0]['text'][:150]}...")
+        print(f"图片路径: {result[0]['images']}")
+        print(f"文本内容前 150 字: \n{result[0]['text'][:150]}...")
