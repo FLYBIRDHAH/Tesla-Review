@@ -45,17 +45,17 @@ CLEANED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 CLEAN_HEADER_FOOTER_PATTERN = re.compile(r'(^\s*\d+\s*$)|(.*用户手册.*)|(.*Model 3.*)', re.IGNORECASE | re.MULTILINE)
 
 # 魔法 2：并发清洗的最大线程数 (未来如果你要洗 100 本手册时会用到)
-CLEAN_MAX_WORKERS = 4
+CLEAN_MAX_WORKERS = 2
 
 # =============================================================================
 # 5. LLM 大模型配置 (指向本地 vLLM 服务)
 # =============================================================================
 # 因为我们要在本地用 vLLM 启动大模型，默认端口是 8000
-LLM_API_URL = "http://localhost:6006/v1"  
+LLM_API_URL = "http://127.0.0.1:8000/v1"  
 # 本地模型不需要真实的 API Key，随便填一个就行
 LLM_API_KEY = "sk-local-token"
 # 这里写你接下来准备下载/使用的 Qwen3.5 模型名称
-LLM_MODEL_NAME = "qwen3.5" # 提示：如果你用的 Qwen3.5，名称根据你实际启动的参数来定
+LLM_MODEL_NAME = "Qwen3.5-9B" # 提示：如果你用的 Qwen3.5，名称根据你实际启动的参数来定
 
 
 # 自动创建目录
