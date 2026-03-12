@@ -57,6 +57,30 @@ LLM_API_KEY = "sk-local-token"
 # 这里写你接下来准备下载/使用的 Qwen3.5 模型名称
 LLM_MODEL_NAME = "qwen-4b" # 提示：如果你用的 Qwen3.5，名称根据你实际启动的参数来定
 
+# 6.Milvus 数据库文件存放路径
+MILVUS_DB_FILE = str(DATA_DIR / "saved_index" / "tesla_milvus.db")
+MILVUS_COLLECTION_NAME = "tesla_bge_m3_hybrid"
+
+# 7.BGE-M3 模型路径 (填入你在 AutoDL 上的实际下载路径，或者直接用 HuggingFace 的仓库名)
+EMBEDDING_BGE_M3_DIR    = str(MODELS_DIR / "bge-m3")
+
+# =============================================================================
+# 8. MongoDB 数据库配置
+# =============================================================================
+MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/')
+MONGO_DB_NAME = os.environ.get('MONGO_DB_NAME', 'tesla_rag_db')
+
+# =============================================================================
+# 9. 清洗好后的数据路径配置
+# =============================================================================
+SPLIT_DOCS_FILE = str(DATA_DIR / "processed/split_docs.pkl")
+
+# =============================================================================
+# 10. 模型参数配置
+EMBEDDING_BATCH_SIZE = 50      # Embedding 批次大小
+# =============================================================================
+
+MILVUS_ID_MAX_LENGTH = 128     # ID 字段最大长度
 
 # 自动创建目录
 for path in [DATA_DIR, IMAGE_SAVE_DIR, MODELS_DIR]:

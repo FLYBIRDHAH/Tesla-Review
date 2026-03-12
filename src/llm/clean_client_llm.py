@@ -4,6 +4,7 @@ import sys
 import logging
 import concurrent.futures
 from typing import List, Optional
+import re  # <--- 新增这行，引入正则表达式模块
 from tqdm import tqdm
 import re  # <--- 新增这行，引入正则表达式模块
 from langchain_core.documents import Document

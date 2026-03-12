@@ -20,7 +20,7 @@ def inspect_pkl():
         print(f"✅ 总计: {len(clean_docs)} 页文档")
         
         # 随便抽查第 12 页（索引为 11）的数据，防止越界我们加个判断
-        sample_idx = min(11, len(clean_docs) - 1) 
+        sample_idx = min(10, len(clean_docs) - 1) 
         sample_doc = clean_docs[sample_idx]
         
         print(f"👇 抽查第 {sample_idx + 1} 个 Document：")
@@ -42,7 +42,7 @@ def inspect_pkl():
         # 抽查前 3 个分块看看切得合不合理
         print("👇 抽查前 3 个分块：")
         for i in range(min(3, len(split_docs))):
-            doc = split_docs[i]
+            doc = split_docs[i+19]
             print(f"  [块 {i+1}] Metadata: {doc.metadata}")
             print(f"  [块 {i+1}] Content: {doc.page_content[:100]}...\n")
     else:
