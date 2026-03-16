@@ -50,19 +50,23 @@ CLEAN_MAX_WORKERS = 2
 # =============================================================================
 # 5. LLM 大模型配置 (指向本地 vLLM 服务)
 # =============================================================================
+VLLM_MODEL_NAME = ""
+VLLM_BASE_URL = ""
+VLLM_API_KEY = ""
 # 因为我们要在本地用 vLLM 启动大模型，默认端口是 8000
 LLM_API_URL = "http://127.0.0.1:8000/v1"  
 # 本地模型不需要真实的 API Key，随便填一个就行
 LLM_API_KEY = "sk-local-token"
 # 这里写你接下来准备下载/使用的 Qwen3.5 模型名称
-LLM_MODEL_NAME = "qwen-4b" # 提示：如果你用的 Qwen3.5，名称根据你实际启动的参数来定
+LLM_MODEL_NAME = "Qwen3.5-9B" # 提示：如果你用的 Qwen3.5，名称根据你实际启动的参数来定
 
 # 6.Milvus 数据库文件存放路径
 MILVUS_DB_FILE = str(DATA_DIR / "saved_index" / "tesla_milvus.db")
 MILVUS_COLLECTION_NAME = "tesla_bge_m3_hybrid"
 
-# 7.BGE-M3 模型路径 (填入你在 AutoDL 上的实际下载路径，或者直接用 HuggingFace 的仓库名)
-EMBEDDING_BGE_M3_DIR    = str(MODELS_DIR / "bge-m3")
+# 7.BGE-M3 模型路径和参数 (填入你在 AutoDL 上的实际下载路径，或者直接用 HuggingFace 的仓库名)
+EMBEDDING_BGE_M3_DIR = str(MODELS_DIR / "bge-m3")
+EMBEDDING_BATCH_SIZE = 50      # Embedding 批次大小
 
 # =============================================================================
 # 8. MongoDB 数据库配置
@@ -76,9 +80,15 @@ MONGO_DB_NAME = os.environ.get('MONGO_DB_NAME', 'tesla_rag_db')
 SPLIT_DOCS_FILE = str(DATA_DIR / "processed/split_docs.pkl")
 
 # =============================================================================
-# 10. 模型参数配置
-EMBEDDING_BATCH_SIZE = 50      # Embedding 批次大小
+# 10. bge-reranker-v2-m3重排序模型路径
+RERANK_BGE_M3_DIR = str(MODELS_DIR / "bge-reranker-v2-m3")
+
 # =============================================================================
+
+# 11. LLM 重试配置
+LLM_RETRY_ATTEMPTS = 3          # 重试次数
+LLM_RETRY_WAIT_SECONDS = 2      # 重试间隔(秒)
+
 
 MILVUS_ID_MAX_LENGTH = 128     # ID 字段最大长度
 

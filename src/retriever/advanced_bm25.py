@@ -31,7 +31,7 @@ class AdvancedBM25:
         # 接入 Jieba 词库，这里可以后续自己加停用词过滤
         return [t for t in jieba.lcut(text) if len(t.strip()) > 0]
 
-    def search(self, query: str, k=3):
+    def search(self, query: str, k=5):
         self.retriever.k = k
         return self.retriever.invoke(query)
     # ================= 测试代码 =================
